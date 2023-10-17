@@ -11,16 +11,33 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from configuration import ROOT_PATH
 from app.model import Model
 
+# setup constants
 GUI_WINDOW_TITLE = 'Data Science Template'
-THEME = 'DarkAmber'
+THEME = 'DarkGrey11'
+sg.theme(THEME)
+TEXT_BG_COLOR = sg.theme_background_color()
+DEFAULT_FONT = ('Helvetica', 15)
 
 layout = [
-    [sg.Text('Hello')],
-    [sg.Text('Last Entered Text:'), sg.Text(size=(15, 1), key='-OUTPUT-')],
-    [sg.Text('Enter some text'), sg.Input(key='-IN-')],
-    [sg.Button('Model')],
-    [sg.Canvas(key='-CANVAS-')],
-    [sg.Button('Ok'), sg.Exit()]
+    [
+        sg.Text('Hello', background_color=TEXT_BG_COLOR)
+    ],
+    [
+        sg.Text('Last Entered Text:', background_color=TEXT_BG_COLOR),
+        sg.Text(size=(15, 1), key='-OUTPUT-', background_color=TEXT_BG_COLOR)
+    ],
+    [
+        sg.Text('Enter some text', background_color=TEXT_BG_COLOR), sg.Input(key='-IN-')
+    ],
+    [
+        sg.Button('Model')
+    ],
+    [
+        sg.Canvas(key='-CANVAS-')
+    ],
+    [
+        sg.Button('Ok'), sg.Exit()
+    ]
 ]
 
 
@@ -31,8 +48,7 @@ class ExitCode(Enum):
 
 class MainWindow:
     def __init__(self) -> None:
-        sg.theme(THEME)
-        self.window = sg.Window(GUI_WINDOW_TITLE, layout, finalize=True)
+        self.window = sg.Window(GUI_WINDOW_TITLE, layout, font=DEFAULT_FONT, finalize=True)
 
         self.test_path = ROOT_PATH.joinpath("data/data.csv")
 
