@@ -1,6 +1,8 @@
 import pandas as pd
+import torch
 from tensorflow import keras
 from tensorflow.keras import layers
+
 
 """
 This script shows how to generally build and use a CNN model in Keras.
@@ -35,3 +37,34 @@ history = model.fit(
 )
 
 history_df = pd.DataFrame(history.history)
+
+"""
+The same in pytorch:
+"""
+
+input_shape = (1, 28, 28)  # TODO
+x_train = None  # TODO
+y_train = None  # TODO
+
+
+class MyCNN(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = torch.nn.Conv2d(3, 32, 3)  # in_channels, out_channels, kernel_size
+        self.pool = torch.nn.MaxPool2d(2, 2)
+        self.conv2 = torch.nn.Conv2d(6, 64, 5)
+        self.dropout = torch.nn.Dropout(p=0.5)
+        self.fc1 = torch.nn.Linear(64, 5)
+
+    def forward(self, x):
+        x = self.pool(torch.nn.functional.relu(self.conv1(x)))
+        x = self.pool(torch.nn.functional.relu(self.conv2(x)))
+        x = torch.flatten(x, 1)  # flatten all dimensions except batch
+        x = self.dropout(x)
+        x = self.fc1(x)
+        x = torch.nn.functional.softmax(x, dim=1)
+        return x
+
+
+criterion = torch.nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
